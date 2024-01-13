@@ -1,10 +1,10 @@
 const fetch = require('node-fetch');
 const {initVexjs} = require('./vex');
 
-const {api, rpc} = initVexjs("speakapp");
+const api = initVexjs("speakapp");
 
 const MINE_BITVEXA = 'mine.bitvexa';
-const MINER_ACCOUNT = 'aiueo';
+const MINER_ACCOUNT = process.env.MINER_ACCOUNT;
 let taskID = 0;
 
 function randomID(mask, map) {

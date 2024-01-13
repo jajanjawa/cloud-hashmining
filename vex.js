@@ -9,16 +9,22 @@ const nodes = {
     'speakapp': 'https://vex.speakapp.me',
     'vexascan': 'https://v2.vexascan.com:2096'
 };
+let nodeIndex = 0;
+
+function nextNode() {
+    let keys = Object.keys(nodes);
+    nodeIndex = (nodeIndex < keys.length - 1) ? nodeIndex + 1 : 0;
+    return keys[nodeIndex];
+}
 
 function buildSignatureProvider() {
-    return new JsSignatureProvider([process.env.CRON_KEY]);
+    return new JsSignatureProvider([process.env.ACTIVE_KEY, process.env.CRON_KEY]);
 }
 
 function initVexjs(node) {
     let signatureProvider = buildSignatureProvider();
     let rpc = new JsonRpc(nodes[node], {fetch});
-    let api = new Api({rpc, signatureProvider, textEncoder: new TextEncoder(), textDecoder: new TextDecoder()});
-    return {rpc, api};
+    return new Api({rpc, signatureProvider, textEncoder: new TextEncoder(), textDecoder: new TextDecoder()});
 }
 
-module.exports = {initVexjs};
+module.exports = {initVexjs, nextNode};
