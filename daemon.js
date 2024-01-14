@@ -6,7 +6,7 @@ const MINE_BITVEXA = 'mine.bitvexa';
 const MINER_ACCOUNT = process.env.MINER_ACCOUNT;
 
 let api = initVexjs(nextNode());
-let loop = 0;
+let loop = 1;
 
 function randomID(mask, map) {
     if (mask === void 0) {
@@ -47,14 +47,17 @@ async function doMining(account) {
         let msg = `txid: ${result.transaction_id}, cpu usage: ${cpu_usage}`;
         console.log(msg);
 
-        if (loop % 5 === 0) {
+        if (loop % 10 === 0) {
             api = initVexjs(nextNode());
-            await api.getAbi(MINE_BITVEXA);
+            api.getAbi(MINE_BITVEXA);
             console.log('node ===> ', api.rpc.endpoint);
         }
         if (loop % 15 === 0) {
             readBalance();
             console.log('jumlah nambang ===> ', loop);
+        }
+        if (loop % 30 === 0) {
+            minerEnter(MINER_ACCOUNT);
         }
     } catch (e) {
         console.log(e.message);
@@ -64,9 +67,6 @@ async function doMining(account) {
 function hashmining() {
     try {
         doMining(MINER_ACCOUNT);
-        if (loop % 30 === 0) {
-            minerEnter(MINER_ACCOUNT);
-        }
         loop++;
     } catch (e) {
         console.log(e.message);
